@@ -4,5 +4,8 @@ export const API_STATES = {
 	ERROR: 'ERROR',
 };
 
-export const UPDATE_NAME = 'update-name';
-export const UPDATE_TEAM = 'update-team';
+export const FORM_ACTIONS = {
+	UPDATE_NAME: 'update-name',
+	UPDATE_TEAM: 'update-team',
+	SUBMITING: 'submitting',
+};

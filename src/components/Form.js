@@ -10,7 +10,7 @@ export default function Form({ formData = {} }) {
 		handleChangeSelectedTeam,
 	} = formData;
 
-	const { name, selectedTeam } = formState || {};
+	const { name, selectedTeam, submitting } = formState || {};
 
 	return (
 		<StyledForm onSubmit={handleSubmit}>
@@ -21,12 +21,17 @@ export default function Form({ formData = {} }) {
 					value={name}
 					onChange={handleChangeName}
 					placeholder='name'
+					disabled={submitting}
 				/>
 			</Label>
 
 			<Label>
 				<p>Team:</p>
-				<select value={selectedTeam.value} onChange={handleChangeSelectedTeam}>
+				<select
+					value={selectedTeam.value}
+					onChange={handleChangeSelectedTeam}
+					disabled={submitting}
+				>
 					<option value='blue'>Blue</option>
 					<option value='green'>Green</option>
 					<option value='red'>Red</option>
@@ -34,7 +39,7 @@ export default function Form({ formData = {} }) {
 				</select>
 			</Label>
 
-			<Button type='submit' value='Submit' />
+			<Button type='submit' value='Submit' disabled={submitting} />
 		</StyledForm>
 	);
 }
