@@ -28,7 +28,7 @@ export default function Form({ formData = {} }) {
 
 			<Label>
 				<p>Team:</p>
-				<select
+				<Select
 					value={selectedTeam.value}
 					onChange={handleChangeSelectedTeam}
 					disabled={apiState === API_STATES.LOADING}
@@ -37,7 +37,7 @@ export default function Form({ formData = {} }) {
 					<option value='green'>Green</option>
 					<option value='red'>Red</option>
 					<option value='yellow'>Yellow</option>
-				</select>
+				</Select>
 			</Label>
 
 			{error && error}
@@ -71,6 +71,7 @@ const StyledForm = styled.form`
 const Label = styled.label`
 	margin: 1rem 0;
 	display: flex;
+	align-items: center;
 
 	> p {
 		padding-right: 1rem;
@@ -79,10 +80,20 @@ const Label = styled.label`
 
 const Input = styled.input`
 	width: 100%;
+	height: 2rem;
+	padding: 0.5rem;
+	border-width: 1px;
+	border-radius: 0.25rem;
+`;
+
+const Select = styled.select`
+	height: 2rem;
+	padding: 0.25rem;
 `;
 
 const Button = styled.input`
 	background-color: var(--white);
 	height: 2rem;
 	width: 100%;
+	border-radius: 0.25rem;
 `;
