@@ -1,30 +1,27 @@
 import { useReducer, useCallback } from 'react';
 import { FORM_ACTIONS, API_STATES } from '../../shared/constants';
+// import axios from 'axios';
 
 export default function useForm() {
 	const [formState, dispatch] = useReducer(reducer, initialState);
-
-	const sleep = useCallback(
-		(time = 3000) => {
-			setTimeout(() => {
-				console.log(formState);
-				dispatch({ type: FORM_ACTIONS.SUBMITTING, payload: false });
-			}, time);
-		},
-		[formState]
-	);
 
 	const handleSubmit = useCallback(
 		async (e) => {
 			try {
 				e.preventDefault();
-				dispatch({ type: FORM_ACTIONS.SUBMITTING, payload: true });
-				await sleep(3000);
+				dispatch({ type: FORM_ACTIONS.SUBMITTING });
+				// const response = await axios.post(
+				// 	'https://jsonplaceholder.typicode.com/posts',
+				// 	{}
+				// );
+				// dispatch({ type: API_STATES.SUCCESS, payload: response.data });
+				console.log({ formState });
+				dispatch({ type: API_STATES.SUCCESS });
 			} catch (error) {
 				dispatch({ type: API_STATES.ERROR, payload: error });
 			}
 		},
-		[sleep]
+		[formState]
 	);
 
 	const handleChangeName = (e) => {
@@ -49,7 +46,8 @@ export default function useForm() {
 const initialState = {
 	name: '',
 	selectedTeam: { value: 'red' },
-	submitting: false,
+	apiState: API_STATES.SUCCESS,
+	error: '',
 };
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -69,7 +67,22 @@ const reducer = (state = initialState, { type, payload }) => {
 		case FORM_ACTIONS.SUBMITTING:
 			return {
 				...state,
-				submitting: payload,
+				apiState: API_STATES.LOADING,
+			};
+
+		case API_STATES.SUCCESS:
+			return {
+				...state,
+				name: '',
+				error: '',
+				apiState: API_STATES.SUCCESS,
+			};
+
+		case API_STATES.ERROR:
+			return {
+				...state,
+				error: 'Something went wrong',
+				apiState: API_STATES.ERROR,
 			};
 
 		default:

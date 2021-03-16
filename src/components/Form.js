@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { API_STATES } from '../shared/constants';
 
 export default function Form({ formData = {} }) {
 	const {
@@ -10,7 +11,7 @@ export default function Form({ formData = {} }) {
 		handleChangeSelectedTeam,
 	} = formData;
 
-	const { name, selectedTeam, submitting } = formState || {};
+	const { name, selectedTeam, apiState, error } = formState || {};
 
 	return (
 		<StyledForm onSubmit={handleSubmit}>
@@ -21,7 +22,7 @@ export default function Form({ formData = {} }) {
 					value={name}
 					onChange={handleChangeName}
 					placeholder='name'
-					disabled={submitting}
+					disabled={apiState === API_STATES.LOADING}
 				/>
 			</Label>
 
@@ -30,7 +31,7 @@ export default function Form({ formData = {} }) {
 				<select
 					value={selectedTeam.value}
 					onChange={handleChangeSelectedTeam}
-					disabled={submitting}
+					disabled={apiState === API_STATES.LOADING}
 				>
 					<option value='blue'>Blue</option>
 					<option value='green'>Green</option>
@@ -39,7 +40,12 @@ export default function Form({ formData = {} }) {
 				</select>
 			</Label>
 
-			<Button type='submit' value='Submit' disabled={submitting} />
+			{error && error}
+			<Button
+				type='submit'
+				value='Submit'
+				disabled={apiState === API_STATES.LOADING}
+			/>
 		</StyledForm>
 	);
 }
