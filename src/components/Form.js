@@ -12,7 +12,8 @@ export default function Form({ formData = {} }) {
 		handleChangeSelectedYears,
 	} = formData;
 
-	const { selectedYears, apiState, error } = formState || {};
+	const { currentSelectedValue, selectedYears, apiState, error } =
+		formState || {};
 
 	return (
 		<StyledForm onSubmit={handleSubmit}>
@@ -22,7 +23,7 @@ export default function Form({ formData = {} }) {
 					name='start year'
 					value={selectedYears.startYear}
 					onChange={handleChangeStartYear}
-					placeholder='2021'
+					placeholder={2021}
 					disabled={apiState === API_STATES.LOADING}
 				/>
 			</Label>
@@ -33,7 +34,7 @@ export default function Form({ formData = {} }) {
 					name='end year'
 					value={selectedYears.endYear}
 					onChange={handleChangeEndYear}
-					placeholder='2021'
+					placeholder={2021}
 					disabled={apiState === API_STATES.LOADING}
 				/>
 			</Label>
@@ -41,12 +42,19 @@ export default function Form({ formData = {} }) {
 			<Label>
 				<p>Range Years:</p>
 				<Select
-					value={''}
+					value={currentSelectedValue}
 					onChange={handleChangeSelectedYears}
 					disabled={apiState === API_STATES.LOADING}
 				>
-					{Object.values(YEAR_OPTIONS).map((yearOption) => {
-						return <option value={yearOption.value}>{yearOption.value}</option>;
+					{Object.values(YEAR_OPTIONS).map((yearOption, index) => {
+						return (
+							<option
+								key={`${index}-${yearOption.value}`}
+								value={yearOption.value}
+							>
+								{yearOption.value}
+							</option>
+						);
 					})}
 				</Select>
 			</Label>
@@ -64,11 +72,17 @@ export default function Form({ formData = {} }) {
 Form.propTypes = {
 	formData: PropTypes.shape({
 		formState: PropTypes.shape({
-			name: PropTypes.string,
-			selectedYears: PropTypes.object,
+			currentSelectedValue: PropTypes.string,
+			selectedYears: PropTypes.shape({
+				startYear: PropTypes.number,
+				endYear: PropTypes.number,
+			}),
+			apiState: PropTypes.string,
+			error: PropTypes.string,
 		}),
 		handleSubmit: PropTypes.func,
 		handleChangeStartYear: PropTypes.func,
+		handleChangeEndYear: PropTypes.func,
 		handleChangeSelectedYears: PropTypes.func,
 	}),
 };
