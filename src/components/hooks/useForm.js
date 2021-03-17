@@ -31,12 +31,12 @@ export default function useForm() {
 	);
 
 	const handleChangeStartYear = (e) => {
-		const startYearValue = Number(get(e, 'target.value', 0));
+		const startYearValue = Number(get(e, 'target.value')) || 0;
 		dispatch({ type: FORM_ACTIONS.UPDATE_START_YEAR, payload: startYearValue });
 	};
 
 	const handleChangeEndYear = (e) => {
-		const endYearValue = Number(get(e, 'target.value', 0));
+		const endYearValue = Number(get(e, 'target.value')) || 0;
 		dispatch({ type: FORM_ACTIONS.UPDATE_END_YEAR, payload: endYearValue });
 	};
 
