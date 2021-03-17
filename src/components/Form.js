@@ -1,42 +1,53 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { API_STATES } from '../shared/constants';
+import { API_STATES, YEAR_OPTIONS } from '../shared/constants';
 
 export default function Form({ formData = {} }) {
 	const {
 		formState,
 		handleSubmit,
-		handleChangeName,
-		handleChangeSelectedTeam,
+		handleChangeStartYear,
+		handleChangeEndYear,
+		handleChangeSelectedYears,
 	} = formData;
 
-	const { name, selectedTeam, apiState, error } = formState || {};
+	const { selectedYears, apiState, error } = formState || {};
 
 	return (
 		<StyledForm onSubmit={handleSubmit}>
 			<Label>
 				<Input
 					type='text'
-					name='name'
-					value={name}
-					onChange={handleChangeName}
-					placeholder='name'
+					name='start year'
+					value={selectedYears.startYear}
+					onChange={handleChangeStartYear}
+					placeholder='2021'
 					disabled={apiState === API_STATES.LOADING}
 				/>
 			</Label>
 
 			<Label>
-				<p>Team:</p>
+				<Input
+					type='text'
+					name='end year'
+					value={selectedYears.endYear}
+					onChange={handleChangeEndYear}
+					placeholder='2021'
+					disabled={apiState === API_STATES.LOADING}
+				/>
+			</Label>
+
+			<Label>
+				<p>Range Years:</p>
 				<Select
-					value={selectedTeam.value}
-					onChange={handleChangeSelectedTeam}
+					value={''}
+					onChange={handleChangeSelectedYears}
 					disabled={apiState === API_STATES.LOADING}
 				>
-					<option value='blue'>Blue</option>
-					<option value='green'>Green</option>
-					<option value='red'>Red</option>
-					<option value='yellow'>Yellow</option>
+					{Object.values(YEAR_OPTIONS).map((yearOption) => {
+						return <option value={yearOption.value}>{yearOption.value}</option>;
+					})}
 				</Select>
 			</Label>
 
@@ -54,11 +65,11 @@ Form.propTypes = {
 	formData: PropTypes.shape({
 		formState: PropTypes.shape({
 			name: PropTypes.string,
-			selectedTeam: PropTypes.object,
+			selectedYears: PropTypes.object,
 		}),
 		handleSubmit: PropTypes.func,
-		handleChangeName: PropTypes.func,
-		handleChangeSelectedTeam: PropTypes.func,
+		handleChangeStartYear: PropTypes.func,
+		handleChangeSelectedYears: PropTypes.func,
 	}),
 };
 

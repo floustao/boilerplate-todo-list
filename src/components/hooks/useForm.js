@@ -1,5 +1,5 @@
 import { useReducer, useCallback } from 'react';
-import { FORM_ACTIONS, API_STATES } from '../../shared/constants';
+import { FORM_ACTIONS, API_STATES, YEAR_OPTIONS } from '../../shared/constants';
 // import axios from 'axios';
 
 export default function useForm() {
@@ -24,13 +24,17 @@ export default function useForm() {
 		[formState]
 	);
 
-	const handleChangeName = (e) => {
-		dispatch({ type: FORM_ACTIONS.UPDATE_NAME, payload: e.target.value });
+	const handleChangeStartYear = (e) => {
+		dispatch({ type: FORM_ACTIONS.UPDATE_START_YEAR, payload: e.target.value });
 	};
 
-	const handleChangeSelectedTeam = (e) => {
+	const handleChangeEndYear = (e) => {
+		dispatch({ type: FORM_ACTIONS.UPDATE_END_YEAR, payload: e.target.value });
+	};
+
+	const handleChangeSelectedYears = (e) => {
 		dispatch({
-			type: FORM_ACTIONS.UPDATE_TEAM,
+			type: FORM_ACTIONS.UPDATE_RANGE_YEARS,
 			payload: { value: e.target.value },
 		});
 	};
@@ -38,30 +42,49 @@ export default function useForm() {
 	return {
 		formState,
 		handleSubmit,
-		handleChangeName,
-		handleChangeSelectedTeam,
+		handleChangeStartYear,
+		handleChangeEndYear,
+		handleChangeSelectedYears,
 	};
 }
 
 const initialState = {
-	name: '',
-	selectedTeam: { value: 'red' },
+	selectedYears: {
+		startYear: 2021,
+		endYear: 2021,
+	},
 	apiState: API_STATES.SUCCESS,
 	error: '',
 };
 
+function getStartAndEndYears(optionKey) {
+	const { endYear, range } = YEAR_OPTIONS[optionKey];
+	return {
+		startYear: endYear - range,
+		endYear: endYear,
+	};
+}
+
+// function getCurrentYear() {
+// 	let today = new Date();
+// 	let currentYear = today.getFullYear();
+// 	return currentYear;
+// }
+
+// function getLastYear() {
+// 	let today = new Date();
+// 	let lastYear = today.getFullYear() - 1;
+// 	return lastYear;
+// }
+
 const reducer = (state = initialState, { type, payload }) => {
 	switch (type) {
-		case FORM_ACTIONS.UPDATE_NAME:
+		case FORM_ACTIONS.UPDATE_RANGE_YEARS:
+		case FORM_ACTIONS.UPDATE_START_YEAR:
+		case FORM_ACTIONS.UPDATE_END_YEAR:
 			return {
 				...state,
-				name: payload,
-			};
-
-		case FORM_ACTIONS.UPDATE_TEAM:
-			return {
-				...state,
-				selectedTeam: payload,
+				selectedYears: getStartAndEndYears(payload.value),
 			};
 
 		case FORM_ACTIONS.SUBMITTING:
