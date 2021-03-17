@@ -8,7 +8,8 @@ export const FORM_ACTIONS = {
 	UPDATE_START_YEAR: 'update-start-year',
 	UPDATE_END_YEAR: 'update-end-year',
 	UPDATE_RANGE_YEARS: 'update-range-years',
-	SUBMITING: 'submitting',
+	SUBMITTING: 'submitting',
+	CANCEL: 'cancel',
 };
 
 export const YEAR_OPTIONS = {
@@ -50,6 +51,6 @@ export const YEAR_OPTIONS = {
 };
 
 export const DEFAULT_RANGE = {
-	startYear: 'Custom',
-	endYear: 'Custom',
+	startYear: 0,
+	endYear: 0,
 };

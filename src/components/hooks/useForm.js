@@ -6,21 +6,14 @@ import {
 	YEAR_OPTIONS,
 	DEFAULT_RANGE,
 } from '../../shared/constants';
-// import axios from 'axios';
 
 export default function useForm() {
 	const [formState, dispatch] = useReducer(reducer, initialState);
 
 	const handleSubmit = useCallback(
-		async (e) => {
+		(e) => {
 			try {
 				e.preventDefault();
-				dispatch({ type: FORM_ACTIONS.SUBMITTING });
-				// const response = await axios.post(
-				// 	'https://jsonplaceholder.typicode.com/posts',
-				// 	{}
-				// );
-				// dispatch({ type: API_STATES.SUCCESS, payload: response.data });
 				console.log({ formState });
 				dispatch({ type: API_STATES.SUCCESS });
 			} catch (error) {
@@ -29,6 +22,15 @@ export default function useForm() {
 		},
 		[formState]
 	);
+
+	const handleCancel = useCallback((e) => {
+		try {
+			e.preventDefault();
+			dispatch({ type: FORM_ACTIONS.CANCEL });
+		} catch (error) {
+			dispatch({ type: API_STATES.ERROR, payload: error });
+		}
+	}, []);
 
 	const handleChangeStartYear = (e) => {
 		const startYearValue = Number(get(e, 'target.value')) || 0;
@@ -49,6 +51,7 @@ export default function useForm() {
 
 	return {
 		formState,
+		handleCancel,
 		handleSubmit,
 		handleChangeStartYear,
 		handleChangeEndYear,
@@ -112,16 +115,23 @@ const reducer = (state = initialState, { type, payload }) => {
 					endYear: get(state, 'selectedYears.endYear', 'default'),
 				},
 			};
+
 		case FORM_ACTIONS.SUBMITTING:
 			return {
 				...state,
 				apiState: API_STATES.LOADING,
 			};
 
+		case FORM_ACTIONS.CANCEL:
+			return {
+				...state,
+				selectedYears: DEFAULT_RANGE,
+				apiState: API_STATES.SUCCESS,
+			};
+
 		case API_STATES.SUCCESS:
 			return {
 				...state,
-				name: '',
 				error: '',
 				apiState: API_STATES.SUCCESS,
 			};

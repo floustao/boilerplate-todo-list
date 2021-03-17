@@ -24,7 +24,7 @@ const GlobalStyles = createGlobalStyle`
     --orange: #f5a623;
     --grey: #9b9b9b;
     --gray: var(--grey);
-    --bs: 0 10px 20px 0 rgba(0,0,0,0,0.9);
+    --bs: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     --maxWidth: 90vw;
     --lineHeight: 1rem;
     box-sizing: border-box;
